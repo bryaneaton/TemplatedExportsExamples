@@ -1,2 +1,16 @@
 *.yaml
 *.yml
+
+# Ignore PyCharm project files
+.idea/
+*.iml
+
+# Ignore PyCharm-specific Python files
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environment in PyCharm
+.vscode/
+.env/
+venv/
+

@@ -1,0 +1,101 @@
+{
+  "ExportConfigName": "FedRAMP-POAM-Template.xlsx",
+  "sequences": [
+    {
+      "name": "Open POA&M Items",
+      "worksheetIndex": 0,
+      "offsetTop": 6,
+      "offsetTopStep": 1,
+      "offsetLeft": 0,
+      "offsetLeftStep": 0,
+      "dataObjects": [
+        {"name": "Issues", "sourceType": "entityframework", "sourcePath": "GetAllIssuesQuery({sspId}, 'securityplans')"}],
+      "iterate": "all",
+      "dataElements": [
+        {
+          "label": "POAM ID", "function": "GetPropertyValue",
+          "parameters": ["Issues", "Id", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "V-{0}",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": "POAM ID, prepended with a 'V-'"
+        },
+        {
+          "label": "Controls",
+          "function": "GetPropertyValue",
+          "parameters": ["Issues", "Id", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "RA-5",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": "This is a static string value"
+        },
+        {
+          "label": "Weakness Name",
+          "function": "GetPropertyValue",
+          "parameters": ["Issues", "Title", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": "I would like fallback to CVE or PluginId if title not available."
+        },
+        {
+          "label": "Weakness Description",
+          "function": "GetPropertyValue",
+          "parameters": ["Issues", "Description", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": ""
+        },
+        {
+          "label": "Weakness Detector Source",
+          "function": "GetPropertyValue",
+          "parameters": ["Issues", "SourceReport", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": "Need to add fallback to Title"
+        },
+        {
+          "label": "Weakness Source Identifier",
+          "function": "GetPropertyValue",
+          "parameters": ["Issues", "PluginId", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": "Need to add fallback to Title"
+        },
+        {
+          "label": "Asset Identifier",
+          "function": "GetPropertyValue",
+          "parameters": ["Issues", "assetIdentifier", 0],
+          "defaultNull": "",
+          "defaultZeroLength": "",
+          "validValues": [],
+          "replaceValue": "",
+          "defaultInvalidValue": "Error: value is not a valid value",
+          "mapValues": {},
+          "comment": ""
+        }
+      ]
+    }
+  ]
+}

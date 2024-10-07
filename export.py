@@ -8,8 +8,26 @@ from regscale.models.regscale_models.file import File
 app = Application()
 api = Api()
 
+
+def get_file_info():
+    global existing_files, file_id, res
+    # Get existing files for the parent
+    existing_files = File.get_files_for_parent_from_regscale(parent_id=17, parent_module='securityplans')
+    # Check if the file already exists
+    for file in existing_files:
+        if file.trustedDisplayName == file_name:
+            file_id = file.id
+            break
+    else:
+        # If file doesn't exist, create a new one
+        res = File.upload_file_to_regscale(api=api, file_name=template_path, parent_id=17,
+                                           parent_module='securityplans')
+        file_id = res['id']
+
+    return file_id
+
+
 if __name__ == '__main__':
-    file_id = 0
     mapper = {}
 
     # Load the mapper file
@@ -21,22 +39,13 @@ if __name__ == '__main__':
 
     file_name = template_path.name
 
-    # Get existing files for the parent
-    existing_files = File.get_files_for_parent_from_regscale(parent_id=17, parent_module='securityplans')
+    file_id = get_file_info()
 
-    # Check if the file already exists
-    for file in existing_files:
-        if file.trustedDisplayName == file_name:
-            file_id = file.id
-            break
-    else:
-        # If file doesn't exist, create a new one
-        res = File._create_regscale_file(api=api, file_path=template_path, parent_id=17, parent_module='securityplans')
-        file_id = res['id']
+    existing_uuid = "cd5ffcfe-c030-4639-8e48-38233bae81df"
 
     # Define the export payload
     payload = {
-        "uuid": "386de580-9e41-4d8e-a51e-5c302ffbbf77",
+        "uuid": existing_uuid,
         "active": True,
         "isPublic": True,
         "version": "5",
@@ -48,7 +57,10 @@ if __name__ == '__main__':
 
     # Export orchestration
     url = f'{app.config["domain"]}/api/ExportOrchestration'
-    export_res = api.get(f'{url}/byUuid/{payload["uuid"]}')
+    if not existing_uuid:
+        res = api.post(url, json=payload)
+        existing_uuid = res.json()['uuid']
+    export_res = api.get(f'{url}/byUuid/{existing_uuid}')
 
     export_data = export_res.json()
     export_uuid = export_data['uuid']
